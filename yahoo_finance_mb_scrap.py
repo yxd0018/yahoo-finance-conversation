@@ -69,7 +69,7 @@ def clickByText(text):
 
 def init():
     global driver
-    driver = webdriver.Chrome("c:/Users/ZKMN5NF/AppData/Roaming/anaconda2/chromedriver.exe", options=build_chrome_options())
+    driver = webdriver.Chrome("c:/temp/chromedriver.exe", options=build_chrome_options())
     
     folderBase = 'C:/temp/' + datetime.date.today().strftime(DATE_FORMAT)
     mkdir_p(folderBase)
