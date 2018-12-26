@@ -1,11 +1,11 @@
 from selenium import webdriver
 from time import sleep
-import csv
 import errno    
 import os
 import os.path
 import datetime
 import sys
+import numpy as np
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
@@ -21,8 +21,8 @@ xpath_poster = '//*[@id="canvass-0-CanvassApplet"]/div/ul/li/div/div[1]/button'
 DATE_FORMAT = '%Y-%m-%d'
 TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
-TRAFFIC_MED = []
-TRAFFIC_HIGH = ['aapl', ]
+TRAFFIC_MED = ['aapl', ]
+TRAFFIC_HIGH = [] #['aapl', ]
 
 def build_chrome_options():
     chrome_options = webdriver.ChromeOptions()
@@ -67,11 +67,11 @@ def clickByText(text):
     driver.find_elements_by_xpath('//span[contains(text(),"' + text + '")]')[0].click()
 
 
-def init():
+def init(base):
     global driver
-    driver = webdriver.Chrome("c:/temp/chromedriver.exe", options=build_chrome_options())
-    
-    folderBase = 'C:/temp/' + datetime.date.today().strftime(DATE_FORMAT)
+    driver = webdriver.Chrome("c:/Progra~1/zip/selenium/chromedriver.exe", options=build_chrome_options())
+
+    folderBase = base + '/' + datetime.date.today().strftime(DATE_FORMAT)
     mkdir_p(folderBase)
     return folderBase
 
@@ -90,7 +90,7 @@ def selectReaction():
 
 def checkTime(symbol, time):
     timeStrDefault = ['last year', 'years ago', ]
-    #timeStrDefault = ['last month', 'months ago', 'last year', 'years ago', ]
+    # timeStrDefault = ['last month', 'months ago', 'last year', 'years ago', ]
     timeStrMed = timeStrDefault + ['days ago', ]
     timeStrHigh = timeStrMed + ['yesterday', ]
     
@@ -150,19 +150,17 @@ def scrap(folderBase, s):
 
 
 def main(argv):
-    symbols = ['ftk', 'uan', 'asps', 'ocn', 'lxu', 'bbx', 'bxg', ]
-    
-    folderBase = init()
+    symbols = ['ftk', 'uan', 'asps', 'ocn', 'lxu', 'bbx', 'bxg', 'aapl']
+    base = 'C:/temp'
+    folderBase = init(base)
     
     for s in symbols:
         connect(s)
         selectReaction()
         expand(s)
         scrap(folderBase, s)
-    print 'saved to ', folderBase
+    print('saved to {}'.format(folderBase))
 
 
 if __name__ == "__main__":
     main(sys.argv)
-    
-    
